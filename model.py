@@ -8,6 +8,13 @@ from sklearn.model_selection import train_test_split
 
 import os
 import pandas as pd
+
+label = pd.DataFrame()
+file_path="export_dataframe.csv"
+data=pd.read_csv(file_path)
+label['Label']=data['label']
+data=data.drop('label',1)
+
 x_train, x_test, y_train, y_test = train_test_split(data, label, test_size=0.3)
 
 print(x_train.head())
