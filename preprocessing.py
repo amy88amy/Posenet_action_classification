@@ -12,7 +12,7 @@ df_yy=pd.DataFrame()
 df_x=pd.DataFrame()
 df_y=pd.DataFrame()
 dist=pd.DataFrame()
-i = 0
+i = -1
 for subdir, dirs, files in os.walk(root_dir):
     for file in files:
         path = os.path.join(subdir, file)
