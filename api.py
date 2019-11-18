@@ -1,20 +1,16 @@
-from flask import Flask, url_for
-from flask import json
-from flask import request
-from prediction import prediction
+from flask import Flask, Response, json, request, url_for
 
+from prediction import prediction
 
 app = Flask(__name__)
 
-@app.route('/', methods = ['POST'])
+@app.route('/predict', methods = ['POST'])
 def api_root():
-    
-    prediction(request.data)
-    return 'Welcome'
+    datas = prediction(request.data)
+    resp = Response(json.dumps(datas), status=200, mimetype='application/json')
+    print (resp.status_code)
+    return resp
 
-@app.route('/articles/<articleid>')
-def api_article(articleid):
-    return 'You are reading ' + articleid
 
 if __name__ == '__main__':
     app.run(host="localhost", port=8000, debug=True)

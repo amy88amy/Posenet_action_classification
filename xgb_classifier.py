@@ -1,43 +1,36 @@
 # Gradient Boosting 
-from sklearn.ensemble import GradientBoostingClassifier
-import matplotlib.pyplot as plt
-import tensorflow as tf
-from tensorflow import feature_column
-from sklearn.model_selection import train_test_split
-from keras import optimizers
-from sklearn.metrics import accuracy_score, recall_score, average_precision_score, confusion_matrix, precision_score
-
 import os
-import pandas as pd
-import numpy as np
 import pickle
 
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import tensorflow as tf
+from keras import optimizers
+from sklearn.ensemble import GradientBoostingClassifier
+from sklearn.metrics import (accuracy_score, average_precision_score,
+                             confusion_matrix, precision_score, recall_score)
+from sklearn.model_selection import train_test_split
+from tensorflow import feature_column
+from xgboost import XGBClassifier
 
 label = pd.DataFrame()
 file_path="export_dataframe.csv"
 data=pd.read_csv(file_path)
 data = data.sample(frac=1)
-print(data.shape)
 
 labels = data.pop('Label')
 class_names = ['book', 'car', 'gift', 'movie', 'sell', 'total']
 x_train, x_test, y_train, y_test = train_test_split(data, labels, test_size=0.3)
 
-print(x_test.dtypes)
 eval_set = [(x_train,y_train), (x_test,y_test)]
-print(type(x_test))
+
 clf = GradientBoostingClassifier(n_estimators=300, learning_rate=0.3, max_depth=10, verbose=2, n_iter_no_change=15)
-# n_estimators = 100 (default)
-# loss function = deviance(default) used in Logistic Regression
 history = clf.fit(x_train,y_train)
-# print(history)
 
-
-print(type(x_test))
-print(x_test)
 y_pred = clf.predict(x_test)
 predictions = [np.round(value) for value in y_pred]
-# evaluate predictions
+
 accuracy = accuracy_score(y_test, predictions)
 print("Accuracy: %.2f%%" % (accuracy * 100.0))
 
@@ -83,7 +76,6 @@ print("Recall: ", (recall * 100.0))
 # plt.show()
 
 
-from xgboost import XGBClassifier
 clf = XGBClassifier(n_estimators=300, learning_rate=0.3, max_depth=10)
 # n_estimators = 100 (default)
 # max_depth = 3 (default)
@@ -109,8 +101,6 @@ recall = recall_score(y_test, predictions, labels=[0, 1, 2, 3, 4, 5], average=No
 print("Recall: ", (recall * 100.0))
 
 results = clf.evals_result()
-
-print(results.keys())
 
 # epochs = len(results['validation_0']['merror'])
 # x_axis = range(0, epochs)
